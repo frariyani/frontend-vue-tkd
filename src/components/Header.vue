@@ -1,6 +1,8 @@
 <template>
     <header>
-        <p>Griya Media Nusantara</p>
+        <div class="title">
+          <p>Griya Media Nusantara</p>
+        </div>
         <nav>
           <ul>
             <li>
@@ -10,39 +12,55 @@
             </li>
             <li>
               <a href="#">
-                Tambah
+                Profil
               </a>
             </li>
           </ul>
         </nav>
     </header>
+
+
 </template>
+<script>
+
+</script>
 
 <style scoped lang="scss">
 header{
   background-color: #FEB856;
-  display: flex;
-  padding: 1.5rem;
   box-shadow:0 5px 8px rgb(214, 214, 214);
+  display: flex;
+  padding: 20px;
+  align-items: center;
+}
 
-  p{
-    font-size: 18px;
+.title{
+  font-size: 24px;
+}
+
+nav{
+  margin-left: auto;
+
+  ul li a{
+    list-style: none;
+    text-decoration: none;
     color: #171C2D;
+    font-size: 20px;
+    margin: 6px;
   }
-  nav{
-    margin-left: auto;
 
-    ul li a{
-      display: inline-flex;
-      font-size: 18px;
-      color: #171C2D;
-      list-style: none;
-      text-decoration: none;
-    }
-    ul li a:hover{
-      color: honeydew;
-    }
+  ul li a:hover{
+    color: honeydew;
+  }
+
+  .btn-tambah{
+    background-color: rgb(252, 122, 41);
+    padding: 8px;
+    color: rgb(238, 238, 238);
+    cursor: pointer;
   }
 }
+
+
 
 </style>
