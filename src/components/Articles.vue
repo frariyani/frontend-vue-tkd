@@ -11,17 +11,23 @@
         <div v-if="value">
           <form method="POST" enctype="multipart/form-data">
             <div class="form-wrapper">
-              <input placeholder="Judul">
+              <input
+                placeholder="Judul"
+                v-model="form.title"
+              >
             </div>
             <div class="form-wrapper">
               <textarea
                 placeholder="Deskripsi"
+                v-model="form.description"
               ></textarea>
             </div>
-            <div class="submit-wrapper">
-              <input type="submit" value="Simpan">
-            </div>
           </form>
+          <div class="submit-wrapper" @click="save()">
+            <button>
+              Simpan
+            </button>
+          </div>
         </div>
         <div
           v-for="article in articles"
@@ -29,8 +35,8 @@
         >
           <article>
             <h4>{{article.title}}</h4>
-            <p>{{article.desc}}</p>
-            <button>
+            <p>{{article.description}}</p>
+            <button @click="deleteArticle(article.id)">
               Hapus
             </button>
           </article>
@@ -61,25 +67,46 @@ export default {
   name: 'HelloWorld',
   data(){
     return{
+      article: new FormData,
       value: false,
-      articles:[
-        {
-          id: 1,
-          title: 'Mengenal Web Standard',
-          desc: 'Apa itu Web Standard? Web Standard adalah teknologi yang dibangun oleh W3C dan lainnya yang dikembangkan untuk menginterpretasikan konten web agar memiliki standar yang dapat dinikmati oleh semua kalangan dan dapat diakses di semua <em>device</em> (smartphone, tablet, desktop dan lain sebagainya).'
-        },
-        {
-          id: 2,
-          title: 'Mengenal Web Standard',
-          desc: 'Apa itu Web Standard?'
-        },
-        {
-          id: 3,
-          title: 'Lorem Ipsum',
-          desc: 'Lorem ipsum sit dolor amet'
-        }
-      ]
+      message: '',
+      articles:[],
+      load: false,
+      form:{
+        title: null,
+        description: null
+      }
     }
+  },
+  methods:{
+    readData(){
+      var url = this.$api + '/article/display/'
+      this.$http.get(url, {}).then(response => {
+        this.articles = response.data.data
+      })
+    },
+    save(){
+      this.article.append('title', this.form.title)
+      this.article.append('description', this.form.description)
+
+      var url = this.$api+'/article/create'
+      this.load = true
+      this.$http.post(url, this.article, {
+      }).then(
+        this.readData()
+      )
+    },
+    deleteArticle(id){
+      var url = this.$api + '/article/delete/'+id
+      this.load = true
+      this.$http.get(url,{
+      }).then(
+        this.readData()
+      )
+    }
+  },
+  mounted(){
+    this.readData()
   }
 }
 </script>
@@ -139,6 +166,7 @@ article{
     margin-top: 1rem;
     background-color: red;
   }
+
 }
 .profile{
   background-color: rgb(250, 209, 142);
@@ -146,7 +174,6 @@ article{
   border-radius: 8px;
   padding: 16px;
   aside{
-    border: red 2px solid;
     padding: 8px;
     img{
       margin: 5px;
@@ -157,7 +184,6 @@ article{
   }
 }
 form{
-  border: 1px rgb(0, 58, 165) solid;
   padding: 8px;
   border-radius: 8px;
   .form-wrapper{
@@ -167,14 +193,14 @@ form{
       border-color: orange 3px solid;
     }
   }
-  .submit-wrapper{
-    input{
-      width: 75%;
-      background-color: rgb(252, 122, 41);
-      border: none;
-      padding: 3px;
-      color: white;
-    }
+}
+.submit-wrapper{
+  button{
+    width: 75%;
+    background-color: rgb(252, 122, 41);
+    border: none;
+    padding: 3px;
+    color: white;
   }
 }
 </style>
